@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.thoughtworks.xstream.XStream;
 import com.waageweb.tides.app.data.dataModel.LocationData;
@@ -157,8 +158,7 @@ public class TidesTask  extends AsyncTask<String, Void, Void> {
             xstream.useAttributeFor(WaterLevel.class, "time");
             xstream.useAttributeFor(WaterLevel.class, "flag");
 
-            /*Tide tempTide = (Tide) xstream.fromXML(buffer);
-
+            Tide tempTide = (Tide) xstream.fromXML(buffer.toString());
 
             for (int i = 0; i < tempTide.getLocationdata().getData().size() ; i++){
                     ContentValues cv = new ContentValues();
@@ -168,33 +168,24 @@ public class TidesTask  extends AsyncTask<String, Void, Void> {
                     cv.put(TideStrings.Columns.HIGHLOW, String.valueOf(tempTide.getLocationdata().getData().get(i).getFlag()));
                     cv.put(TideStrings.Columns.UNIT, String.valueOf("cm"));
                     context.getContentResolver().insert(TidesProvider.Uris.TIDE_CONTENT_URI, cv);
-            }*/
+            }
+
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error ", e);
+            // If the code didn't successfully get the weather data, there's no point in attemping
+            // to parse it.
 
             // Faker data siden kartverket er nede....
             for (int i = 0; i < 4; i++){
                 ContentValues cv = new ContentValues();
                 cv.put(TideStrings.Columns.CREATED, new Date().getTime());
                 cv.put(TideStrings.Columns.NAME, String.valueOf("Bergen"));
-                cv.put(TideStrings.Columns.VALUE, String.valueOf(10 * i));
-                cv.put(TideStrings.Columns.HIGHLOW, String.valueOf(20*i));
+                cv.put(TideStrings.Columns.VALUE, String.valueOf(12 * (i+2)));
+                cv.put(TideStrings.Columns.HIGHLOW, String.valueOf(23*(i+2)));
                 cv.put(TideStrings.Columns.UNIT, String.valueOf("cm"));
                 context.getContentResolver().insert(TidesProvider.Uris.TIDE_CONTENT_URI, cv);
             }
 
-            // Simulate the task using a few seconds
-            try {
-                Thread.sleep(4000);
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-
-
-
-
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attemping
-            // to parse it.
             return null;
         } finally {
             if (urlConnection != null) {

@@ -1,9 +1,13 @@
 package com.waageweb.tides.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,7 +32,12 @@ public class MapsActivity extends FragmentActivity {
         TidesTask weatherTask = new TidesTask(this, new TidesTask.CallBack() {
             @Override
             public void onTidesUpdated() {
-                setUpMapIfNeeded();
+                if( mMap != null){
+                    setUpMap();
+                }else {
+                    setUpMapIfNeeded();
+                }
+
             }
         });
         weatherTask.execute("60.389444", "5.33");
@@ -73,6 +82,8 @@ public class MapsActivity extends FragmentActivity {
             if (mMap != null) {
                 setUpMap();
             }
+        }else  {
+            setUpMap();
         }
     }
 
@@ -83,6 +94,8 @@ public class MapsActivity extends FragmentActivity {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
+
+        mMap.clear();
 
         GoogleMap.OnInfoWindowClickListener clickListener = new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -95,9 +108,7 @@ public class MapsActivity extends FragmentActivity {
             }
         };
 
-
        mMap.setOnInfoWindowClickListener(clickListener);
-
 
         String name = "Venter på lokasjonsdata...";
         CameraUpdate center= CameraUpdateFactory.newLatLngZoom(latLng, 15);
