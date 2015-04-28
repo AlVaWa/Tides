@@ -27,7 +27,6 @@ public class TidesProvider extends ContentProvider {
         public static final String TIDE = String.format("%s/%s/%s", ContentResolver.CURSOR_DIR_BASE_TYPE, Uris.AUTHORITY, Uris.TIDES);
     }
 
-
     static {
         URI_MATCHER.addURI(Uris.AUTHORITY, Uris.TIDES, UriType.TIDES);
     }

@@ -142,6 +142,8 @@ public class TidesTask  extends AsyncTask<String, Void, Void> {
                 return null;
             }
 
+            System.out.println(buffer);
+
             XStream xstream = new XStream();
             xstream.alias("tide", Tide.class);
             xstream.alias("locationdata", LocationData.class);
@@ -155,19 +157,39 @@ public class TidesTask  extends AsyncTask<String, Void, Void> {
             xstream.useAttributeFor(WaterLevel.class, "time");
             xstream.useAttributeFor(WaterLevel.class, "flag");
 
-            Tide tempTide = (Tide) xstream.fromXML(buffer.toString());
+            /*Tide tempTide = (Tide) xstream.fromXML(buffer);
 
-            System.out.println(tempTide);
 
             for (int i = 0; i < tempTide.getLocationdata().getData().size() ; i++){
-
                     ContentValues cv = new ContentValues();
                     cv.put(TideStrings.Columns.CREATED, new Date().getTime());
                     cv.put(TideStrings.Columns.NAME, String.valueOf(tempTide.getLocationdata().getLocation().getName()));
                     cv.put(TideStrings.Columns.VALUE, String.valueOf(tempTide.getLocationdata().getData().get(i).getValue()));
                     cv.put(TideStrings.Columns.HIGHLOW, String.valueOf(tempTide.getLocationdata().getData().get(i).getFlag()));
+                    cv.put(TideStrings.Columns.UNIT, String.valueOf("cm"));
                     context.getContentResolver().insert(TidesProvider.Uris.TIDE_CONTENT_URI, cv);
+            }*/
+
+            // Faker data siden kartverket er nede....
+            for (int i = 0; i < 4; i++){
+                ContentValues cv = new ContentValues();
+                cv.put(TideStrings.Columns.CREATED, new Date().getTime());
+                cv.put(TideStrings.Columns.NAME, String.valueOf("Bergen"));
+                cv.put(TideStrings.Columns.VALUE, String.valueOf(10 * i));
+                cv.put(TideStrings.Columns.HIGHLOW, String.valueOf(20*i));
+                cv.put(TideStrings.Columns.UNIT, String.valueOf("cm"));
+                context.getContentResolver().insert(TidesProvider.Uris.TIDE_CONTENT_URI, cv);
             }
+
+            // Simulate the task using a few seconds
+            try {
+                Thread.sleep(4000);
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+
+
+
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
